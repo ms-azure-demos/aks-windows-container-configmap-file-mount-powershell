@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: appsettings-configmap
+data:
+  k8sappsettings.json: |-
+    {
+      "interval": "5",
+      "message": "I am from K8s config file"
+    }
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: config-map-mount-test
+spec:
+  containers:
+  - name: config-map-mount-test-container
+    image: joymon/config-map-file-mounting:lts-7.2-nanoserver-1809 # replace with your own registry
+    volumeMounts:
+      - name: appsettings-volume
+        mountPath: c:\\app\\appsettings.json
+        subPath: k8sappsettings.json
+  volumes:
+    - name: appsettings-volume
+      configMap:
+        name: appsettings-configmap
+  nodeSelector:
+    "kubernetes.io/os": windows
