@@ -19,12 +19,12 @@ spec:
   - name: config-map-mount-test-container
     image: joymon/config-map-file-mounting:lts-7.2-nanoserver-1809 # replace with your own registry
     volumeMounts:
-      - name: appsettings-volume
-        mountPath: c:\\app\\appsettings.json
-        subPath: k8sappsettings.json
+      - name: appsettings-volume # this connect to the volume
+        mountPath: c:\\app\\appsettings.json #path inside container 
+        subPath: k8sappsettings.json # key name from configMap data
   volumes:
     - name: appsettings-volume
       configMap:
-        name: appsettings-configmap
+        name: appsettings-configmap # this connects the configMap to volume
   nodeSelector:
     "kubernetes.io/os": windows
